@@ -1,12 +1,40 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import logo from "../images/logo.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { api_based_url } from "../helper";
+import {  toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 const signUP = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
+  const navigate = useNavigate();
 
-  const submitForm = () => {};
+  const submitForm = (e) => {
+    e.preventDefault()
+    fetch(api_based_url + "/login", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        pwd,
+      }),
+    }).then(res=>res.json()).then(data => {
+      if(data.success){
+        localStorage.setItem("token",data.token)
+        localStorage.setItem("userId",data.userId)
+        navigate("/")
+      }
+      else{
+        toast.error(data.msg)
+      }
+    })
+  };
 
   return (
     <>

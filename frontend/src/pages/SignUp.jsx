@@ -2,20 +2,48 @@ import React from "react";
 import logo from "../images/logo.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { api_based_url } from "../helper";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const signUP = () => {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
 
-  const submitForm = (e) => {};
+  const navigate = useNavigate();
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    fetch(api_based_url + "/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        name,
+        email,
+        pwd,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          navigate("/login");
+        } else {
+          toast.error(data.message);
+        }
+      });
+  };
 
   return (
     <>
-      <div className="con flex items-center h-screen justify-center flex-col">
+      <div className="con  flex items-center h-screen justify-center flex-col">
         <form
+          
           onSubmit={submitForm}
-          className="w-full px-[10px] flex flex-col items-center justify-center"
+          className="w-full    px-[10px] flex flex-col items-center justify-center"
           action=""
         >
           <img className="w-[150px] object-cover " src={logo} alt="" />
