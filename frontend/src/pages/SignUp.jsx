@@ -47,7 +47,7 @@ const SignUp = () => {
           >
             <Logo size="large" variant="animated" />
             <h1 className="text-4xl font-extrabold tracking-tight mt-6 text-ig-text leading-tight">
-              Join BondBase today.
+              Join Social Network today.
             </h1>
             <p className="text-base text-ig-text-secondary mt-3 leading-relaxed">
               Create your account to share posts, publish 24-hour stories, discover creators, and connect in real-time.

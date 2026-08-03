@@ -73,7 +73,7 @@ const Logo = ({ variant = "full", size = "normal", className = "" }) => {
       >
         {renderIcon()}
         <span className={`font-black tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-blue-400 bg-clip-text text-transparent ${textSize}`}>
-          BondBase
+          Social Network
         </span>
       </motion.div>
     );
@@ -84,7 +84,7 @@ const Logo = ({ variant = "full", size = "normal", className = "" }) => {
       {renderIcon()}
       <div className="flex flex-col">
         <span className={`font-black tracking-tight text-ig-text group-hover:text-ig-primary transition-colors ${textSize}`}>
-          BondBase
+          Social Network
         </span>
       </div>
     </div>

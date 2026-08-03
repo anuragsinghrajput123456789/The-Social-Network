@@ -13,7 +13,7 @@ const exploreRoutes = require("./exploreRoutes");
 
 // Health check endpoint
 router.get("/", (req, res) => {
-  res.json({ success: true, message: "BondBase API is operational" });
+  res.json({ success: true, message: "Social Network API is operational" });
 });
 
 // Mount modular sub-routers

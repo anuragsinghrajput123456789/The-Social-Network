@@ -23,7 +23,7 @@ const Login = () => {
         if (data.theme) {
           localStorage.setItem("theme", data.theme);
         }
-        toast.success("Welcome to BondBase!");
+        toast.success("Welcome to Social Network!");
         navigate("/");
       } else {
         toast.error(data.msg);

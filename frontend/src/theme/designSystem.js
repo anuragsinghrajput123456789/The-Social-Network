@@ -1,9 +1,9 @@
-// BondBase Centralized Design System Tokens
+// Social Network Centralized Design System Tokens
 
 export const designTokens = {
   brand: {
-    name: "BondBase",
-    tagline: "Connect, Share & Build Unbreakable Social Bonds",
+    name: "Social Network",
+    tagline: "Connect, Share & Build Communities",
     primary: "#6A5AE0", // Bond Violet
     primaryHover: "#5848c9",
     secondary: "#3B82F6", // Cyber Sky
