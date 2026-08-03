@@ -1,46 +1,92 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require("cors");
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const fs = require('fs');
+const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-const { connect } = require('http2');
-var app = express();
+const indexRouter = require('./routes/index');
+const connectDB = require('./config/db');
+const { errorHandler } = require('./middleware/errorMiddleware');
+const { sanitizeInput } = require('./middleware/sanitizeMiddleware');
+const { apiLimiter, authLimiter, commentLimiter, interactionLimiter } = require('./middleware/rateLimitMiddleware');
 
-//Connecting  data base...
+const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// Security Headers
+app.disable('x-powered-by');
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+
+// Auto-create uploads directory if it does not exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Connect MongoDB database
+connectDB();
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static("./uploads",express.static(path.join(__dirname, 'uploads'))));
-app.use(cors())
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  : ['*'];
 
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Fallback for dev ease
+      }
+    },
+    credentials: true
+  })
+);
+
+// Input Sanitization (NoSQL & XSS)
+app.use(sanitizeInput);
+
+// Health Check Endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    dbState: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
+
+// Apply Rate Limiters
+app.use('/login', authLimiter);
+app.use('/signup', authLimiter);
+app.use('/addComment', commentLimiter);
+app.use('/toggleLike', interactionLimiter);
+app.use('/toggleFollow', interactionLimiter);
+app.use('/', apiLimiter);
+
+app.use('/uploads', express.static(uploadsDir));
+
+// Mount API router
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// Catch 404 and forward to error handler
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// Global error handler middleware
+app.use(errorHandler);
 
 module.exports = app;

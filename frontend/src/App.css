@@ -1,40 +1,46 @@
-body {
-  background-color: black;
-  color: white;
-}
-
+/* Premium Scrollbars and Layouts */
 .inputBox {
   display: flex;
-  background-color: #2727272a;
-  border: 1px solid black;
+  background-color: var(--ig-hover);
+  border: 1px solid var(--ig-border);
+  border-radius: 12px;
 }
 
 .inputBox input {
   flex: 1;
-  border-radius: 5px;
+  border-radius: 12px;
   background-color: transparent;
-  padding: 10px;
+  padding: 12px;
   border: none;
   outline: none;
+  color: var(--ig-text);
 }
 
-
-.inputBox textarea{
+.inputBox textarea {
   flex: 1;
-  border-radius: 5px;
+  border-radius: 12px;
   background-color: transparent;
-  padding: 10px;
-  min-height: 40vh;
+  padding: 12px;
+  min-height: 20vh;
   resize: vertical;
   border: none;
   outline: none;
+  color: var(--ig-text);
 }
 
 .btnNormal {
   border: none;
-  border-radius: 5px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 10px 20px;
   cursor: pointer;
+  background-color: var(--ig-primary);
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btnNormal:hover {
+  background-color: var(--ig-primary-hover);
 }
 
 .topUsers::-webkit-scrollbar {
@@ -42,7 +48,10 @@ body {
 }
 
 .posts {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* spacing between posts */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  background-color: transparent;
+  padding: 0px 10px;
+  place-items: center;
 }

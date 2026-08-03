@@ -1,1 +1,161 @@
 @import "tailwindcss";
+
+@theme {
+  --color-ig-bg: var(--ig-bg);
+  --color-ig-surface: var(--ig-surface);
+  --color-ig-border: var(--ig-border);
+  --color-ig-text: var(--ig-text);
+  --color-ig-text-secondary: var(--ig-text-secondary);
+  --color-ig-primary: var(--ig-primary);
+  --color-ig-primary-hover: var(--ig-primary-hover);
+  --color-ig-hover: var(--ig-hover);
+  --color-ig-glow: var(--ig-glow);
+  --font-ig: "Poppins", "Plus Jakarta Sans", "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  /* Default: Dark Theme (BondBase Midnight Violet) */
+  --ig-bg: #10121b;
+  --ig-surface: #151826;
+  --ig-border: rgba(113, 119, 144, 0.25);
+  --ig-text: #f9fafb;
+  --ig-text-secondary: #8f9394;
+  --ig-primary: #6A5AE0;
+  --ig-primary-hover: #5848c9;
+  --ig-hover: #1f2236;
+  --ig-glow: rgba(106, 90, 224, 0.35);
+  --ig-story-gradient: linear-gradient(to top right, #6A5AE0, #3B82F6, #ec4899);
+}
+
+[data-theme="light"] {
+  --ig-bg: #f8fafc;
+  --ig-surface: #ffffff;
+  --ig-border: #e2e8f0;
+  --ig-text: #0f172a;
+  --ig-text-secondary: #64748b;
+  --ig-primary: #6A5AE0;
+  --ig-primary-hover: #5848c9;
+  --ig-hover: #f1f5f9;
+  --ig-glow: rgba(106, 90, 224, 0.15);
+  --ig-story-gradient: linear-gradient(to top right, #6A5AE0, #3B82F6, #ec4899);
+}
+
+[data-theme="dark"] {
+  --ig-bg: #10121b;
+  --ig-surface: #151826;
+  --ig-border: rgba(113, 119, 144, 0.25);
+  --ig-text: #f9fafb;
+  --ig-text-secondary: #8f9394;
+  --ig-primary: #6A5AE0;
+  --ig-primary-hover: #5848c9;
+  --ig-hover: #1f2236;
+  --ig-glow: rgba(106, 90, 224, 0.35);
+  --ig-story-gradient: linear-gradient(to top right, #6A5AE0, #3B82F6, #ec4899);
+}
+
+[data-theme="violet"] {
+  --ig-bg: #0d091a;
+  --ig-surface: #16102b;
+  --ig-border: rgba(139, 92, 246, 0.3);
+  --ig-text: #f3ebfc;
+  --ig-text-secondary: #aa9cbe;
+  --ig-primary: #8b5cf6;
+  --ig-primary-hover: #7c3aed;
+  --ig-hover: #21183e;
+  --ig-glow: rgba(139, 92, 246, 0.35);
+  --ig-story-gradient: linear-gradient(to top right, #ec4899, #8b5cf6, #3b82f6);
+}
+
+[data-theme="sunset"] {
+  --ig-bg: #0d0607;
+  --ig-surface: #190c0f;
+  --ig-border: #3d1b22;
+  --ig-text: #fdf2f4;
+  --ig-text-secondary: #c2a2a7;
+  --ig-primary: #f97316;
+  --ig-primary-hover: #ea580c;
+  --ig-hover: #291418;
+  --ig-glow: rgba(249, 115, 22, 0.3);
+  --ig-story-gradient: linear-gradient(to top right, #fbbf24, #f87171, #db2777);
+}
+
+[data-theme="cyberpunk"] {
+  --ig-bg: #030712;
+  --ig-surface: #0a1128;
+  --ig-border: #13275c;
+  --ig-text: #e2e8f0;
+  --ig-text-secondary: #94a3b8;
+  --ig-primary: #06b6d4;
+  --ig-primary-hover: #0891b2;
+  --ig-hover: #0d2250;
+  --ig-glow: rgba(6, 182, 212, 0.3);
+  --ig-story-gradient: linear-gradient(to top right, #06b6d4, #3b82f6, #ec4899);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ig);
+  background-color: var(--ig-bg);
+  color: var(--ig-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ig-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ig-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ig-primary);
+}
+
+/* Custom BondBase card styles */
+.premium-card {
+  @apply bg-ig-surface border border-ig-border rounded-2xl p-6 shadow-xl transition-all duration-300 hover:border-ig-primary/60;
+  box-shadow: 0 8px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.frosted-glass {
+  background: rgba(21, 24, 38, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.input-field {
+  @apply w-full bg-ig-bg/60 border border-ig-border rounded-xl px-4 py-3 text-sm outline-none transition-all duration-300 text-ig-text placeholder-ig-text-secondary/60 focus:border-ig-primary focus:ring-2 focus:ring-ig-primary/30 focus:bg-ig-bg;
+}
+
+.btn-primary {
+  @apply bg-ig-primary hover:bg-ig-primary-hover text-white font-semibold py-2.5 px-5 rounded-xl cursor-pointer text-sm transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2;
+  box-shadow: 0 4px 20px -2px var(--ig-glow);
+}
+
+.btn-secondary {
+  @apply bg-ig-hover hover:bg-ig-border text-ig-text border border-ig-border font-semibold py-2.5 px-5 rounded-xl cursor-pointer text-sm transition-all duration-300 active:scale-95 flex items-center justify-center gap-2;
+}
+
+/* Skeleton shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, var(--ig-surface) 25%, var(--ig-hover) 50%, var(--ig-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}

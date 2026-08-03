@@ -7,12 +7,13 @@
 var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
+var env = require('../config/env');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -28,6 +29,10 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+// Socket.io initialization using dedicated SocketService
+const socketService = require("../services/socketService");
+socketService.init(server);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -87,4 +92,22 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('Server running on ' + bind);
 }
+
+// Graceful Shutdown Handler
+const gracefulShutdown = (signal) => {
+  console.log(`\nReceived ${signal}. Initiating graceful shutdown...`);
+  server.close(() => {
+    console.log('HTTP server closed. Exiting process.');
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    console.error('Could not close connections in time, forcefully shutting down.');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));

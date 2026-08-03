@@ -1,1 +1,0 @@
-export const api_based_url = "http://localhost:3000";
